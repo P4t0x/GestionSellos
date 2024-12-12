@@ -1,0 +1,174 @@
+import java.util.ArrayList; // Importa la clase ArrayList para manejar colecciones dinámicas
+import java.util.Scanner;    // Importa la clase Scanner para leer la entrada del usuario
+
+// Definición de la clase Sello
+class Sello {
+    private String pais;      // Atributo para almacenar el país del sello
+    private String motivo;    // Atributo para almacenar el motivo del sello
+    private int anoEmision;   // Atributo para almacenar el año de emisión del sello
+
+    // Constructor de la clase Sello, que inicializa los atributos
+    public Sello(String pais, String motivo, int anoEmision) {
+        this.pais = pais;
+        this.motivo = motivo;
+        this.anoEmision = anoEmision;
+    }
+
+    // Método getter para obtener el país
+    public String getPais() {
+        return pais;
+    }
+
+    // Método getter para obtener el motivo
+    public String getMotivo() {
+        return motivo;
+    }
+
+    // Método getter para obtener el año de emisión
+    public int getAnoEmision() {
+        return anoEmision;
+    }
+
+    // Sobrescribe el método toString() para mostrar los detalles del sello
+    @Override
+    public String toString() {
+        return "País: " + pais + ", Motivo: " + motivo + ", Año de emisión: " + anoEmision;
+    }
+}
+
+// Definición de la clase principal de gestión de sellos
+public class GestionSellosFinal {
+    private ArrayList<Sello> sellos;  // Lista que almacena los sellos
+
+    // Constructor de la clase GestionSellosFinal
+    public GestionSellosFinal() {
+        sellos = new ArrayList<>();  // Inicializa la lista de sellos
+    }
+
+    // Método para agregar un nuevo sello a la lista
+    public void agregarSello(String pais, String motivo, int anoEmision) {
+        Sello nuevoSello = new Sello(pais, motivo, anoEmision);  // Crea un nuevo objeto Sello
+        sellos.add(nuevoSello);  // Agrega el nuevo sello a la lista
+        System.out.println("Sello agregado: " + nuevoSello);  // Muestra un mensaje de confirmación
+    }
+
+    // Método para mostrar todos los sellos en la lista
+    public void mostrarSellos() {
+        if (sellos.isEmpty()) {  // Verifica si la lista está vacía
+            System.out.println("La lista de sellos está vacía.");  // Muestra un mensaje si la lista está vacía
+        } else {
+            System.out.println("Lista de sellos:");  // Muestra un mensaje para indicar que se van a listar los sellos
+            for (Sello sello : sellos) {  // Recorre la lista de sellos
+                System.out.println(sello);  // Muestra los detalles de cada sello
+            }
+        }
+    }
+
+    // Método para eliminar un sello basado en el país
+    public void eliminarSello(String pais) {
+        boolean encontrado = false;  // Variable para indicar si se encontró el sello
+        Sello selloAEliminar = null; // Variable para almacenar el sello a eliminar
+        for (Sello sello : sellos) {  // Recorre la lista de sellos
+            if (sello.getPais().equalsIgnoreCase(pais)) {  // Si el país del sello coincide con el buscado
+                selloAEliminar = sello;  // Asigna el sello a eliminar
+                encontrado = true;  // Marca como encontrado
+                break;  // Sale del bucle
+            }
+        }
+        if (encontrado) {  // Si el sello fue encontrado
+            sellos.remove(selloAEliminar);  // Elimina el sello de la lista
+            System.out.println("Sello eliminado: " + selloAEliminar);  // Muestra un mensaje de confirmación
+        } else {
+            System.out.println("Sello no encontrado.");  // Muestra un mensaje si no se encontró el sello
+        }
+    }
+
+    // Método para mostrar el menú de opciones
+    private static void mostrarMenu() {
+        System.out.println("\nMenu:");  // Imprime el menú de opciones
+        System.out.println("1. Agregar sello");  // Opción 1: Agregar un nuevo sello
+        System.out.println("2. Mostrar sellos");  // Opción 2: Mostrar todos los sellos
+        System.out.println("3. Eliminar sello");  // Opción 3: Eliminar un sello por país
+        System.out.println("4. Salir");  // Opción 4: Salir del programa
+        System.out.print("Seleccione una opción: ");  // Pide al usuario que seleccione una opción
+    }
+
+    // Método para capturar la opción seleccionada por el usuario
+    private static int capturarOpcion(Scanner scanner) {
+        int opcion = -1;  // Variable para almacenar la opción seleccionada
+        try {
+            opcion = Integer.parseInt(scanner.nextLine());  // Intenta convertir la entrada a un número
+        } catch (NumberFormatException e) {  // Si ocurre un error al convertir, muestra un mensaje
+            System.out.println("Error: Entrada inválida. Por favor, ingrese un número.");
+        }
+        return opcion;  // Devuelve la opción seleccionada
+    }
+
+    // Método para manejar la opción seleccionada por el usuario
+    private static void manejarOpcion(int opcion, GestionSellosFinal gestionSellos, Scanner scanner) {
+        switch (opcion) {  // Dependiendo de la opción seleccionada
+            case 1:
+                agregarSello(gestionSellos, scanner);  // Llama al método para agregar un sello
+                break;
+            case 2:
+                gestionSellos.mostrarSellos();  // Llama al método para mostrar los sellos
+                break;
+            case 3:
+                eliminarSello(gestionSellos, scanner);  // Llama al método para eliminar un sello
+                break;
+            default:
+                System.out.println("Opción no válida. Intente de nuevo.");  // Si la opción es inválida
+        }
+    }
+
+    // Método para agregar un sello, llamado desde el menú
+    private static void agregarSello(GestionSellosFinal gestionSellos, Scanner scanner) {
+        try {
+            System.out.print("Ingrese el país del sello: ");  // Solicita el país del sello
+            String pais = scanner.nextLine();  // Lee la entrada del país
+            System.out.print("Ingrese el motivo del sello: ");  // Solicita el motivo del sello
+            String motivo = scanner.nextLine();  // Lee la entrada del motivo
+            System.out.print("Ingrese el año de emisión del sello: ");  // Solicita el año de emisión
+            int ano = Integer.parseInt(scanner.nextLine());  // Lee y convierte el año de emisión a número
+
+            if (ano < 0) {  // Si el año es negativo, muestra un error
+                System.out.println("Error: El año de emisión no puede ser negativo.");
+            } else {
+                gestionSellos.agregarSello(pais, motivo, ano);  // Llama al método para agregar el sello
+            }
+        } catch (NumberFormatException e) {  // Si ocurre un error al convertir el año
+            System.out.println("Error: El año de emisión debe ser un número válido.");
+        }
+    }
+
+    // Método para eliminar un sello, llamado desde el menú
+    private static void eliminarSello(GestionSellosFinal gestionSellos, Scanner scanner) {
+        System.out.print("Ingrese el país del sello a eliminar: ");  // Solicita el país del sello a eliminar
+        String paisEliminar = scanner.nextLine();  // Lee la entrada del país
+        gestionSellos.eliminarSello(paisEliminar);  // Llama al método para eliminar el sello
+    }
+
+    // Método para salir del programa
+    private static void salirPrograma(Scanner scanner) {
+        System.out.println("Saliendo del programa.");  // Muestra un mensaje de salida
+        scanner.close();  // Cierra el escáner
+    }
+
+    // Método principal donde comienza la ejecución del programa
+    public static void main(String[] args) {
+        GestionSellosFinal gestionSellos = new GestionSellosFinal();  // Crea una instancia de la clase GestiónSellosFinal
+        Scanner scanner = new Scanner(System.in);  // Crea un escáner para leer la entrada del usuario
+
+        while (true) {  // Bucle infinito para mostrar el menú hasta que el usuario decida salir
+            mostrarMenu();  // Muestra el menú de opciones
+            int opcion = capturarOpcion(scanner);  // Captura la opción seleccionada por el usuario
+
+            if (opcion == 4) {  // Si la opción es 4, salir del programa
+                salirPrograma(scanner);
+                break;  // Termina el bucle
+            }
+
+            manejarOpcion(opcion, gestionSellos, scanner);  // Maneja la opción seleccionada
+        }
+    }
+}
